@@ -1,0 +1,33 @@
+name: "Vercel Deploy Action"
+description: "Deploys Vercel to specific environment"
+inputs:
+  comment-trigger:
+    description: "Comment to trigger deploy. (e.g. /deploy)"
+    required: true
+  github-token:
+    description: "GitHub token. (e.g. secrets.GITHUB_TOKEN)"
+    required: true
+  vercel-token:
+    description: "Vercel access token"
+    required: true
+  ref:
+    required: true
+    description: "ref to be deployed"
+  sha:
+    required: true
+    description: "sha to be deployed"
+  commit:
+    required: true
+    description: "commit to be deployed"
+  vercel-scope:
+    required: false
+    description: "If you are work in team scope, you should set this value to your team id."
+  vercel-project-name:
+    required: false
+    description: "The name of the project"
+outputs:
+  preview-url:
+    description: "deployment preview URL"
+runs:
+  using: "node12"
+  main: "dist/index.js"
