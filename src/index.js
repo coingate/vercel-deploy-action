@@ -38,7 +38,7 @@ async function vercelLogs(deployUrl) {
     deployUrl,
     '-t',
     vercelToken,
-    '-O',
+    '-o',
     'raw',
     '-n',
     500,
