@@ -200,7 +200,7 @@ async function run() {
     deployArgs.push(...['--env', `STAGING_ID=${stage}`]);
   } else if (
     github.context.eventName === 'push' &&
-    ref === 'refs/heads/master'
+    ['refs/heads/master', 'refs/heads/main'].includes(ref)
   ) {
     core.info('Deploying to production');
 
