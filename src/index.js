@@ -107,8 +107,8 @@ async function vercelDeploy(deployRef, commitMessage, paramArgs = []) {
   return myOutput;
 }
 
-async function setAliasDomain(deploymentUrl, aliasDomain) {
-  core.info(`setting alias domain ${aliasDomain} for ${deploymentUrl}`)
+async function setAliasDomain(deployUrl, alias) {
+  core.info(`setting alias domain ${alias} for ${deployUrl}`)
   let myOutput = '';
 
   const options = {};
@@ -126,8 +126,8 @@ async function setAliasDomain(deploymentUrl, aliasDomain) {
     '-t',
     vercelToken,
     '-y',
-    deploymentUrl,
-    aliasDomain,
+    deployUrl,
+    alias,
   ];
 
   if (vercelScope) {
