@@ -108,7 +108,7 @@ async function vercelDeploy(deployRef, commitMessage, paramArgs = []) {
 }
 
 async function setAliasDomain(deployUrl, alias) {
-  core.info(`setting alias domain ${alias} for ${deployUrl}`)
+  core.info(`setting alias domain ${alias} for ${deployUrl}`);
   let myOutput = '';
 
   const options = {};
@@ -122,13 +122,7 @@ async function setAliasDomain(deployUrl, alias) {
     },
   };
 
-  const args = [
-    '-t',
-    vercelToken,
-    '-y',
-    deployUrl,
-    alias,
-  ];
+  const args = ['-t', vercelToken, '-y', deployUrl, alias];
 
   if (vercelScope) {
     core.info('using scope');
@@ -251,7 +245,7 @@ async function run() {
     core.info('set preview-url output');
     core.setOutput('preview-url', deploymentUrl);
 
-    if (aliasDomain != '' && stage != '') {
+    if (aliasDomain !== '' && stage !== '') {
       await setAliasDomain(deploymentUrl, `pay-${stage}.${aliasDomain}`);
     }
   } else {
