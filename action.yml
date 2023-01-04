@@ -25,6 +25,9 @@ inputs:
   vercel-project-name:
     required: false
     description: "The name of the project"
+  alias-domain:
+    required: false
+    description: "Automatically assigns provided domain to the deployment."
 outputs:
   preview-url:
     description: "deployment preview URL"

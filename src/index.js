@@ -8,6 +8,7 @@ const githubToken = core.getInput('github-token');
 const vercelToken = core.getInput('vercel-token');
 const vercelScope = core.getInput('vercel-scope');
 const vercelProjectName = core.getInput('vercel-project-name');
+const aliasDomain = core.getInput('alias-domain');
 const ref = core.getInput('ref');
 const sha = core.getInput('sha');
 const commit = core.getInput('commit');
@@ -102,6 +103,38 @@ async function vercelDeploy(deployRef, commitMessage, paramArgs = []) {
   }
 
   await exec.exec('npx', ['vercel', ...args, ...paramArgs], options);
+
+  return myOutput;
+}
+
+async function setAliasDomain(deploymentUrl, aliasDomain) {
+  let myOutput = '';
+
+  const options = {};
+  options.listeners = {
+    stdout: data => {
+      myOutput += data.toString();
+      core.info(data.toString());
+    },
+    stderr: data => {
+      core.info(data.toString());
+    },
+  };
+
+  const args = [
+    '-t',
+    vercelToken,
+    '-y',
+    deploymentUrl,
+    aliasDomain,
+  ];
+
+  if (vercelScope) {
+    core.info('using scope');
+    args.push('--scope', vercelScope);
+  }
+
+  await exec.exec('npx', ['vercel', 'alias', 'set', ...args], options);
 
   return myOutput;
 }
@@ -215,6 +248,10 @@ async function run() {
   if (deploymentUrl) {
     core.info('set preview-url output');
     core.setOutput('preview-url', deploymentUrl);
+
+    if (aliasDomain) {
+      await setAliasDomain(deploymentUrl, aliasDomain);
+    }
   } else {
     core.warning('get preview-url error');
   }
