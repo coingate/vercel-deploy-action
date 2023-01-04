@@ -108,6 +108,7 @@ async function vercelDeploy(deployRef, commitMessage, paramArgs = []) {
 }
 
 async function setAliasDomain(deploymentUrl, aliasDomain) {
+  core.info(`setting alias domain ${aliasDomain} for ${deploymentUrl}`)
   let myOutput = '';
 
   const options = {};
@@ -216,6 +217,7 @@ async function run() {
   core.debug(`workflow : ${context.workflow}`);
 
   const deployArgs = [];
+  let stage = '';
 
   if (
     context.eventName === 'issue_comment' &&
@@ -225,7 +227,7 @@ async function run() {
     core.debug(`The provided comment is: ${context.payload.comment.body}`);
 
     const commentBody = context.payload.comment.body.split(' ');
-    const stage = commentBody[commentBody.indexOf(commentTrigger) + 1];
+    stage = commentBody[commentBody.indexOf(commentTrigger) + 1];
 
     core.debug(`The provided stage is: ${stage}`);
 
@@ -249,8 +251,8 @@ async function run() {
     core.info('set preview-url output');
     core.setOutput('preview-url', deploymentUrl);
 
-    if (aliasDomain) {
-      await setAliasDomain(deploymentUrl, aliasDomain);
+    if (aliasDomain != '' && stage != '') {
+      await setAliasDomain(deploymentUrl, `pay-${stage}.${aliasDomain}`);
     }
   } else {
     core.warning('get preview-url error');
