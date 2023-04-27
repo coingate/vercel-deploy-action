@@ -12,7 +12,6 @@ const aliasDomain = core.getInput('alias-domain');
 const ref = core.getInput('ref');
 const sha = core.getInput('sha');
 const commit = core.getInput('commit');
-const prNumber = core.getInput('pr-number') || null;
 
 const octokit = new github.GitHub(githubToken);
 
@@ -226,9 +225,6 @@ async function run() {
 
     core.debug(`The provided stage is: ${stage}`);
 
-  } else if (prNumber) {
-    core.info(`Deploying PR ${prNumber} to integration environment`);
-
   } else if (
     github.context.eventName === 'push' &&
     ['refs/heads/master', 'refs/heads/main'].includes(ref)
@@ -249,8 +245,6 @@ async function run() {
 
     if (aliasDomain !== '' && stage !== '') {
       await setAliasDomain(deploymentUrl, `pay-${stage}.${aliasDomain}`);
-    } else if (prNumber) {
-      await setAliasDomain(deploymentUrl, `${prNumber}.pay.integration.${aliasDomain}`);
     }
   } else {
     core.warning('get preview-url error');
