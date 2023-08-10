@@ -179,7 +179,12 @@ async function createCommentOnPullRequest(
 }
 
 async function createCommentOnCommit(deploymentCommit, deployUrl, success) {
-  const commentBody = buildCommentBody(deploymentCommit, deployUrl, success);
+  const commentBody = await buildCommentBody(deploymentCommit, deployUrl, success);
+
+  if (!commentBody || commentBody.trim() === '') {
+    core.warning('Comment body is empty. Not creating comment.');
+    return;
+  }
 
   await octokit.repos.createCommitComment({
     ...context.repo,
